@@ -186,7 +186,18 @@ CAREER_MAP = {
 # ── Other dimension labels ────────────────────────────────────────────────────
 
 PERSONALITY_TRAITS = ['jigyasa', 'niyojan', 'samvad', 'sahkar', 'sthairya', 'netrutva']
+# Chart labels — English only (Matplotlib on Linux servers lacks Devanagari fonts)
+# Marathi labels appear in the HTML report via Google Fonts; charts use English only.
 PERSONALITY_LABELS = {
+    'jigyasa':  'Curiosity',
+    'niyojan':  'Organisation',
+    'samvad':   'Communication',
+    'sahkar':   'Cooperation',
+    'sthairya': 'Emotional Stability',
+    'netrutva': 'Leadership',
+}
+# Full bilingual labels used only in HTML report sections (not in matplotlib charts)
+PERSONALITY_LABELS_FULL = {
     'jigyasa':  'जिज्ञासा / Curiosity',
     'niyojan':  'नियोजन / Organisation',
     'samvad':   'संवाद / Communication',
@@ -197,6 +208,14 @@ PERSONALITY_LABELS = {
 
 SKILL_TRAITS = ['logical', 'comm', 'creative', 'digital', 'empathy', 'manual']
 SKILL_LABELS = {
+    'logical':  'Logical',
+    'comm':     'Communication',
+    'creative': 'Creativity',
+    'digital':  'Digital',
+    'empathy':  'People Skills',
+    'manual':   'Manual Skill',
+}
+SKILL_LABELS_FULL = {
     'logical':  'तार्किक विचार / Logical',
     'comm':     'संवाद / Communication',
     'creative': 'सर्जनशीलता / Creativity',
@@ -207,6 +226,14 @@ SKILL_LABELS = {
 
 SUBJECT_TRAITS = ['math', 'science', 'lang', 'social_sci', 'tech', 'arts']
 SUBJECT_LABELS = {
+    'math':       'Maths',
+    'science':    'Science',
+    'lang':       'Languages',
+    'social_sci': 'Social Sci',
+    'tech':       'Tech',
+    'arts':       'Arts & PE',
+}
+SUBJECT_LABELS_FULL = {
     'math':       'गणित / Maths',
     'science':    'विज्ञान / Science',
     'lang':       'भाषा / Languages',
@@ -309,7 +336,8 @@ def fig_to_base64(fig):
 
 
 def chart_interest_radar(interests):
-    labels = [INTEREST_MR[g] for g in INTEREST_GROUPS]
+    # English-only labels — Devanagari fonts not available on Linux servers
+    labels = [INTEREST_EN[g] for g in INTEREST_GROUPS]
     values = [interests[g]   for g in INTEREST_GROUPS]
     values_plot = values + [values[0]]
     angles = np.linspace(0, 2 * np.pi, len(INTEREST_GROUPS), endpoint=False).tolist()
@@ -320,13 +348,13 @@ def chart_interest_radar(interests):
     ax.plot(angles, values_plot, 'o-', linewidth=2.5, color='#E8671A')
     ax.fill(angles, values_plot, alpha=0.22, color='#E8671A')
     ax.set_xticks(angles[:-1])
-    ax.set_xticklabels(labels, size=8, fontweight='bold', color='#1A2E52')
+    ax.set_xticklabels(labels, size=7.5, fontweight='bold', color='#1A2E52')
     ax.set_ylim(0, 100)
     ax.set_yticks([20, 40, 60, 80, 100])
     ax.set_yticklabels(['20', '40', '60', '80', '100'], size=7, color='#888')
     ax.grid(color='#ccc', linestyle='--', linewidth=0.5)
     ax.spines['polar'].set_color('#ddd')
-    ax.set_title('रुची प्रोफाइल\nCareer Interest Profile', size=10, fontweight='bold', color='#1A2E52', pad=20)
+    ax.set_title('Career Interest Profile', size=10, fontweight='bold', color='#1A2E52', pad=20)
     return fig_to_base64(fig)
 
 
@@ -367,7 +395,7 @@ def chart_personality_bar(personality):
                 f'{val}%', va='center', ha='left', fontsize=9, color='#333', fontweight='bold')
     ax.set_xlim(0, 105)
     ax.set_xlabel('Score (%)', color='#555', fontsize=9)
-    ax.set_title('व्यक्तिमत्त्व / Personality Profile', fontsize=11, fontweight='bold', color='#1A2E52', pad=10)
+    ax.set_title('Personality Profile', fontsize=11, fontweight='bold', color='#1A2E52', pad=10)
     ax.axvline(x=50, color='#ccc', linestyle='--', linewidth=0.8)
     ax.tick_params(axis='y', labelsize=9, colors='#333')
     ax.tick_params(axis='x', labelsize=8, colors='#888')
@@ -389,7 +417,7 @@ def chart_skills_bubble(skills):
         ax.text(x[i], y[i], f'{values[i]}%', ha='center', va='center', fontsize=9, fontweight='bold', color='white')
         ax.text(x[i], y[i] - 0.28, labels[i], ha='center', va='top', fontsize=7.5, color='#333')
     ax.set_xlim(0.5, 3.5); ax.set_ylim(0.5, 2.5); ax.axis('off')
-    ax.set_title('कौशल्ये / Skills & Abilities', fontsize=11, fontweight='bold', color='#1A2E52', pad=8)
+    ax.set_title('Skills & Abilities', fontsize=11, fontweight='bold', color='#1A2E52', pad=8)
     fig.tight_layout()
     return fig_to_base64(fig)
 
@@ -406,7 +434,7 @@ def chart_subjects(subjects):
                 ha='center', fontsize=8.5, fontweight='bold', color='#333')
     ax.set_ylim(0, 115)
     ax.set_ylabel('Aptitude (%)', fontsize=9, color='#555')
-    ax.set_title('विषय क्षमता / Subject Aptitude', fontsize=11, fontweight='bold', color='#1A2E52', pad=10)
+    ax.set_title('Subject Aptitude', fontsize=11, fontweight='bold', color='#1A2E52', pad=10)
     ax.tick_params(axis='x', labelsize=7.5, colors='#333', rotation=15)
     ax.tick_params(axis='y', labelsize=8,   colors='#888')
     ax.spines['top'].set_visible(False); ax.spines['right'].set_visible(False)
@@ -476,8 +504,8 @@ def generate_report_html(record, charts):
     cm  = sc['career_match']
     top = sc.get('top_interest_group', '')
 
-    strengths    = ', '.join([SKILL_LABELS[k]   for k, v in sc['top_skills']])
-    subjects_str = ', '.join([SUBJECT_LABELS[k] for k, v in sc['top_subjects']])
+    strengths    = ', '.join([SKILL_LABELS_FULL[k]   for k, v in sc['top_skills']])
+    subjects_str = ', '.join([SUBJECT_LABELS_FULL[k] for k, v in sc['top_subjects']])
 
     val_map  = {'high_income':'उच्च उत्पन्न / High Income','social_impact':'समाजसेवा / Social Impact',
                 'creativity':'सर्जनशीलता / Creativity','stability':'स्थिरता / Stability',
@@ -560,7 +588,6 @@ img.chart{{width:100%;border-radius:10px;border:1px solid #eee}}
 <body>
 <div class="page">
   <div class="header">
-    <div style="font-size:10px;color:#D4A017;letter-spacing:1.5px;margin-bottom:6px">महाराष्ट्र राज्य माध्यमिक व उच्च माध्यमिक शिक्षण मंडळ • SSC CAREER GUIDANCE 2025-26</div>
     <div class="mr-title">कलचाचणी</div>
     <div class="en-title">Kalchachani — Career Aptitude Assessment Report</div>
     <div class="subtitle">Confidential · For School Counsellor Use Only</div>
@@ -641,7 +668,7 @@ img.chart{{width:100%;border-radius:10px;border:1px solid #eee}}
     </div>
   </div>
 
-  <div class="footer">कलचाचणी 2025-26 · महाराष्ट्र राज्य माध्यमिक व उच्च माध्यमिक शिक्षण मंडळ · Report ID: {record['ref_id']}</div>
+  <div class="footer">कलचाचणी 2025-26 · Career Aptitude Assessment · Report ID: {record['ref_id']}</div>
 </div>
 </body></html>"""
 
