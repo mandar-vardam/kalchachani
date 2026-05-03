@@ -1879,15 +1879,17 @@
   </div>
 
   <div id="success-screen">
-    <div class="success-icon">🎉</div>
-    <div class="success-title">कलचाचणी यशस्वीरित्या सादर केली!</div>
+    <div class="success-icon">⏳</div>
+    <div class="success-title">सादर केले! अहवाल तयार होत आहे...</div>
     <div class="success-msg">
-      धन्यवाद! तुमचे उत्तर नोंदवले गेले आहे.<br>
-      Thank you! Your responses have been recorded.<br><br>
-      तुमचा संदर्भ क्रमांक / Your Reference ID:<br>
-      <div class="ref-id" id="refIdDisplay"></div><br>
-      तुमचे शिक्षक/समुपदेशक लवकरच तुमचा तपशीलवार अहवाल देतील. हा क्रमांक लिहून ठेवा.<br>
-      <em>Your teacher/counsellor will share your detailed report soon. Please note your Reference ID.</em>
+      तुमचे उत्तर नोंदवले गेले. तुमचा अहवाल काही क्षणात उघडेल.<br>
+      <em>Your responses are saved. Your report will open in a moment...</em><br><br>
+      <div id="result-link-area" style="display:none">
+        <a id="result-link" href="#" style="display:inline-block;background:#E8671A;color:white;padding:13px 28px;border-radius:50px;font-weight:600;text-decoration:none;font-size:15px;margin-bottom:12px">
+          📊 माझा अहवाल पहा / View My Report
+        </a><br>
+        <span style="font-size:12px;color:#888">Reference ID: <strong id="refIdDisplay" style="color:#E8671A;font-family:monospace"></strong></span>
+      </div>
     </div>
   </div>
 
@@ -2023,13 +2025,26 @@ async function submitTest(){
     });
     const result=await res.json();
     if(result.success){
+      // Hide the test form
       document.getElementById('mainContainer').style.display='none';
       document.getElementById('progressWrap').style.display='none';
+      // Show success screen
       const ss=document.getElementById('success-screen');
       ss.style.display='block';
-      document.getElementById('refIdDisplay').textContent=result.ref_id;
       document.body.appendChild(ss);
       window.scrollTo(0,0);
+      // Set ref ID display
+      document.getElementById('refIdDisplay').textContent=result.ref_id.slice(0,8).toUpperCase();
+      // Build the result URL
+      const resultUrl = (BACKEND_URL || window.location.origin) + '/result/' + result.ref_id;
+      // Set the manual link as fallback
+      const linkEl=document.getElementById('result-link');
+      linkEl.href=resultUrl;
+      document.getElementById('result-link-area').style.display='block';
+      // Auto-redirect after 2 seconds
+      ss.querySelector('.success-icon').textContent='🎉';
+      ss.querySelector('.success-title').textContent='यशस्वी! तुमचा अहवाल उघडत आहे...';
+      setTimeout(()=>{ window.location.href=resultUrl; }, 2000);
     } else { throw new Error(result.error||'Submission failed'); }
   } catch(e){
     btn.disabled=false;

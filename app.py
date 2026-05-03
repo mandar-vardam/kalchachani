@@ -674,6 +674,208 @@ img.chart{{width:100%;border-radius:10px;border:1px solid #eee}}
 
 
 # ─────────────────────────────────────────────
+# STUDENT-FACING REPORT (public, no password)
+# ─────────────────────────────────────────────
+
+def generate_student_report_html(record, charts):
+    s   = record['student']
+    sc  = record['scored']
+    cm  = sc['career_match']
+    top = sc.get('top_interest_group', '')
+    top_color = INTEREST_COLOR.get(top, '#E8671A')
+
+    career_list  = ''.join([f'<li>{c}</li>' for c in cm.get('careers', [])])
+    college_list = ''.join([f'<span class="tag">{c}</span>' for c in cm.get('colleges', [])])
+    submitted_dt = record.get('submitted_at', '')[:10]
+    strengths    = ', '.join([SKILL_LABELS_FULL[k] for k, v in sc['top_skills']])
+
+    interest_rows = ''.join([
+        f'<tr>'
+        f'<td style="padding:7px 4px;font-size:13px">'
+        f'<span style="color:{INTEREST_COLOR[g]};font-weight:700">{INTEREST_MR[g]}</span>'
+        f'<br><span style="color:#888;font-size:11px">{INTEREST_EN[g]}</span></td>'
+        f'<td style="padding:7px 4px"><div style="background:#eee;border-radius:4px;height:14px;width:100%">'
+        f'<div style="background:{INTEREST_COLOR[g]};width:{v}%;height:14px;border-radius:4px"></div></div></td>'
+        f'<td style="text-align:right;font-weight:700;color:{INTEREST_COLOR[g]};padding:7px 4px;font-size:14px">{v}%</td>'
+        f'</tr>'
+        for g, v in sorted(sc['interests'].items(), key=lambda x: x[1], reverse=True)
+    ])
+
+    val_map = {
+        'high_income':'उच्च उत्पन्न / High Income','social_impact':'समाजसेवा / Social Impact',
+        'creativity':'सर्जनशीलता / Creativity','stability':'स्थिरता / Stability',
+        'independence':'स्वातंत्र्य / Independence','prestige':'प्रतिष्ठा / Prestige'
+    }
+    learn_map = {
+        'visual':'दृश्य / Visual','auditory':'श्रवण / Auditory',
+        'reading':'वाचन/लेखन / Reading-Writing','kinesthetic':'क्रियाशील / Kinesthetic'
+    }
+
+    return f"""<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>माझा कलचाचणी अहवाल — {s.get('name','')}</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi&family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{font-family:'DM Sans',sans-serif;background:#f5f0e8;color:#1a1a2e;font-size:15px}}
+.page{{max-width:860px;margin:0 auto;background:white;border-radius:0 0 16px 16px;box-shadow:0 4px 32px rgba(0,0,0,0.10)}}
+.header{{background:linear-gradient(135deg,#0E1C35,#1A2E52);color:white;padding:32px 36px 28px;border-radius:0}}
+.mr-title{{font-family:'Tiro Devanagari Marathi',serif;font-size:42px;color:#D4A017;margin-bottom:6px}}
+.en-title{{font-family:'Playfair Display',serif;font-size:18px;color:rgba(255,255,255,0.8);margin-bottom:4px}}
+.subtitle{{font-size:12px;color:rgba(255,255,255,0.45);letter-spacing:0.8px;text-transform:uppercase}}
+.student-bar{{background:#FFF3E8;border-bottom:3px solid #E8671A;padding:14px 36px;display:flex;gap:22px;flex-wrap:wrap;align-items:center}}
+.sf{{display:flex;flex-direction:column}}
+.sf label{{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:0.5px}}
+.sf span{{font-weight:600;font-size:13px;color:#1A2E52}}
+.ref-chip{{margin-left:auto;background:#1A2E52;color:white;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600}}
+.body{{padding:30px 36px}}
+.section{{margin-bottom:32px}}
+.sec-title{{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:#1A2E52;border-left:4px solid #E8671A;padding-left:12px;margin-bottom:16px}}
+.career-box{{background:linear-gradient(135deg,#FFF3E8,#FFF8F0);border:2px solid #E8671A;border-radius:14px;padding:24px;margin-bottom:14px}}
+.career-box h2{{font-family:'Playfair Display',serif;font-size:19px;color:#1A2E52;margin-bottom:10px}}
+.top-badge{{display:inline-block;background:{top_color};color:white;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:10px}}
+.stream-badge{{display:inline-block;background:#E8671A;color:white;padding:3px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:12px}}
+.career-box p{{font-family:'Tiro Devanagari Marathi',serif;color:#444;line-height:1.8;margin-bottom:14px;font-size:14px}}
+.career-box ul{{list-style:none;padding:0}}
+.career-box ul li{{padding:7px 0;color:#1A2E52;font-weight:500;border-bottom:1px solid #f0e8d8;font-size:14px}}
+.career-box ul li::before{{content:"✦ ";color:#E8671A;font-size:10px}}
+.tag{{display:inline-block;background:#EEF4FF;color:#3056A0;border:1px solid #C7DAFF;padding:3px 10px;border-radius:12px;font-size:12px;margin:3px}}
+.two-col{{display:grid;grid-template-columns:1fr 1fr;gap:18px}}
+img.chart{{width:100%;border-radius:10px;border:1px solid #eee}}
+.interest-table{{width:100%;border-collapse:collapse}}
+.info-grid{{display:grid;grid-template-columns:1fr 1fr;gap:10px}}
+.info-card{{background:#F8F6F0;border-radius:10px;padding:12px 14px;border-left:3px solid #E8671A}}
+.info-card label{{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px}}
+.info-card span{{font-weight:600;font-size:13px;color:#1A2E52}}
+.next-box{{background:linear-gradient(135deg,#F0FFF4,#E8FFF0);border:1.5px solid #16A34A;border-radius:12px;padding:20px 24px;margin-top:8px}}
+.next-box h3{{font-family:'Playfair Display',serif;font-size:16px;color:#14532d;margin-bottom:12px}}
+.next-box ul{{list-style:none;padding:0}}
+.next-box ul li{{padding:6px 0;color:#14532d;font-size:14px;border-bottom:1px solid #bbf7d0}}
+.next-box ul li::before{{content:"→ ";color:#16A34A;font-weight:700}}
+.download-btn{{display:inline-block;background:linear-gradient(135deg,#E8671A,#C4511A);color:white;padding:13px 32px;border-radius:50px;font-size:15px;font-weight:600;text-decoration:none;box-shadow:0 4px 16px rgba(232,103,26,0.35);font-family:'DM Sans',sans-serif}}
+.download-btn:hover{{opacity:0.92}}
+.footer{{background:#1A2E52;color:rgba(255,255,255,0.4);text-align:center;padding:14px;font-size:11px;border-radius:0 0 16px 16px}}
+@media(max-width:600px){{
+  .header{{padding:22px 18px 20px}}
+  .mr-title{{font-size:32px}}
+  .student-bar{{padding:12px 16px;gap:14px}}
+  .body{{padding:20px 16px}}
+  .two-col{{grid-template-columns:1fr}}
+  .info-grid{{grid-template-columns:1fr}}
+  .ref-chip{{margin-left:0;margin-top:4px}}
+  .download-btn{{padding:12px 24px;font-size:14px}}
+}}
+@media print{{body{{background:white}}.page{{box-shadow:none;border-radius:0}}}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="mr-title">कलचाचणी</div>
+    <div class="en-title">Kalchachani — माझा करिअर अहवाल / My Career Report</div>
+    <div class="subtitle">Career Aptitude Assessment · 2025-26</div>
+  </div>
+
+  <div class="student-bar">
+    <div class="sf"><label>नाव / Name</label><span>{s.get('name','—')}</span></div>
+    <div class="sf"><label>शाळा / School</label><span>{s.get('school','—')}</span></div>
+    <div class="sf"><label>जिल्हा / District</label><span>{s.get('district','—')}</span></div>
+    <div class="sf"><label>दिनांक / Date</label><span>{submitted_dt}</span></div>
+    <div class="ref-chip">Ref: {record['ref_id'][:8].upper()}</div>
+  </div>
+
+  <div class="body">
+
+    <!-- CAREER RECOMMENDATION -->
+    <div class="section">
+      <div class="sec-title">🎯 तुमच्यासाठी शिफारस / Your Career Recommendation</div>
+      <div class="career-box">
+        <div class="top-badge">{INTEREST_MR.get(top,'—')} — {INTEREST_EN.get(top,'')}</div>
+        <h2>शिफारस केलेली शाखा:</h2>
+        <div class="stream-badge">{cm.get('stream','—')}</div>
+        <p>{cm.get('description','')}</p>
+        <div style="margin-bottom:10px"><strong style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px">Top Career Paths तुमच्यासाठी</strong></div>
+        <ul>{career_list}</ul>
+        <div style="margin-top:14px">
+          <strong style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px">Suggested Colleges / Institutes</strong>
+          <div style="margin-top:6px">{college_list}</div>
+        </div>
+      </div>
+      <p style="font-size:12px;color:#999;padding-left:4px">★ तुमची स्वतःची पसंती: <strong style="color:#1A2E52">{sc.get('student_stream_choice','—')}</strong></p>
+    </div>
+
+    <!-- INTEREST PROFILE -->
+    <div class="section">
+      <div class="sec-title">📊 तुमचा रुची प्रोफाइल / Your Interest Profile</div>
+      <div class="two-col">
+        <img class="chart" src="data:image/png;base64,{charts['interest_radar']}" alt="Interest Radar">
+        <img class="chart" src="data:image/png;base64,{charts['interest_bars']}"  alt="Interest Bars">
+      </div>
+      <div style="margin-top:16px">
+        <table class="interest-table">{interest_rows}</table>
+      </div>
+    </div>
+
+    <!-- PERSONALITY -->
+    <div class="section">
+      <div class="sec-title">🧠 व्यक्तिमत्त्व / Personality Profile</div>
+      <img class="chart" src="data:image/png;base64,{charts['personality']}" alt="Personality">
+    </div>
+
+    <!-- SKILLS & SUBJECTS -->
+    <div class="section">
+      <div class="sec-title">💡 कौशल्ये आणि विषय / Skills &amp; Subject Aptitude</div>
+      <div class="two-col">
+        <img class="chart" src="data:image/png;base64,{charts['skills']}"   alt="Skills">
+        <img class="chart" src="data:image/png;base64,{charts['subjects']}" alt="Subjects">
+      </div>
+    </div>
+
+    <!-- PERSONAL SUMMARY -->
+    <div class="section">
+      <div class="sec-title">📋 तुमचा सारांश / Your Personal Summary</div>
+      <div class="info-grid">
+        <div class="info-card"><label>तुमची सर्वोत्तम कौशल्ये / Top Skills</label><span>{strengths}</span></div>
+        <div class="info-card"><label>करिअर मूल्य / Career Value</label><span>{val_map.get(sc.get('val_priority',''),'—')}</span></div>
+        <div class="info-card"><label>शिकण्याची पद्धत / Learning Style</label><span>{learn_map.get(sc.get('learn_style',''),'—')}</span></div>
+        <div class="info-card"><label>तुमची शाखा पसंती / Your Stream Choice</label><span>{sc.get('student_stream_choice','—')}</span></div>
+      </div>
+    </div>
+
+    <!-- NEXT STEPS -->
+    <div class="section">
+      <div class="sec-title">🚀 पुढे काय करायचे? / What To Do Next</div>
+      <div class="next-box">
+        <h3>तुमच्यासाठी सुचवलेली पुढील पावले</h3>
+        <ul>
+          <li>तुमच्या शिक्षक किंवा समुपदेशकाशी हा अहवाल शेअर करा — ते तुम्हाला अधिक मार्गदर्शन करतील.</li>
+          <li>शिफारस केलेल्या शाखेबद्दल अधिक माहिती मिळवा: <strong>{cm.get('stream','—')}</strong></li>
+          <li>वरील महाविद्यालयांच्या वेबसाइट पहा आणि प्रवेश प्रक्रिया समजून घ्या.</li>
+          <li>तुमच्या आवडीच्या क्षेत्रातील एखाद्या व्यावसायिकाशी किंवा विद्यार्थ्याशी बोला.</li>
+          <li>हा अहवाल डाउनलोड करा आणि तुमच्या पालकांना दाखवा.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DOWNLOAD -->
+    <div style="text-align:center;padding:16px 0 8px">
+      <a href="/result/{record['ref_id']}/download" class="download-btn">⬇ अहवाल डाउनलोड करा / Download My Report</a>
+      <p style="margin-top:12px;font-size:12px;color:#999">तुमचा Reference ID: <strong style="color:#E8671A;font-family:monospace">{record['ref_id'][:8].upper()}</strong> — हा लिहून ठेवा</p>
+    </div>
+
+  </div>
+
+  <div class="footer">कलचाचणी 2025-26 · Career Aptitude Assessment · Report ID: {record['ref_id']}</div>
+</div>
+</body>
+</html>"""
+
+
+# ─────────────────────────────────────────────
 # ROUTES
 # ─────────────────────────────────────────────
 
@@ -773,6 +975,24 @@ def download_report(ref_id):
     return send_file(BytesIO(html.encode('utf-8')), mimetype='text/html',
                      as_attachment=True,
                      download_name=f'Kalchachani_{name}_{ref_id[:8]}.html')
+
+# ── PUBLIC STUDENT RESULT — no password needed ────────────────────────────────
+@app.route('/result/<ref_id>')
+def student_result(ref_id):
+    record = load_result(ref_id)
+    if not record: abort(404)
+    charts = generate_charts(record['scored'])
+    return generate_student_report_html(record, charts)
+
+@app.route('/result/<ref_id>/download')
+def student_download(ref_id):
+    record = load_result(ref_id)
+    if not record: abort(404)
+    html = generate_student_report_html(record, generate_charts(record['scored']))
+    name = record['student'].get('name', 'student').replace(' ', '_')
+    return send_file(BytesIO(html.encode('utf-8')), mimetype='text/html',
+                     as_attachment=True,
+                     download_name=f'Kalchachani_My_Report_{name}.html')
 
 if __name__ == '__main__':
     print("=" * 60)
