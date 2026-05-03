@@ -164,7 +164,76 @@
           <option>Male / मुलगा</option><option>Female / मुलगी</option><option>Prefer not to say</option>
         </select>
       </div>
-      <div class="form-group"><label>जिल्हा / District *</label><input type="text" id="stuDistrict" placeholder="उदा. पुणे"></div>
+      <div class="form-group"><label>जिल्हा / District *</label>
+        <select id="stuDistrict">
+          <option value="">-- जिल्हा निवडा / Select District --</option>
+          <optgroup label="📍 MMR — Mumbai Region">
+            <option value="Mumbai">Mumbai (South/Central/Suburbs)</option>
+            <option value="Andheri">Andheri / Borivali / Kandivali</option>
+            <option value="Bandra">Bandra / Kurla / Ghatkopar</option>
+            <option value="Mulund">Mulund / Chembur / Vikhroli</option>
+          </optgroup>
+          <optgroup label="📍 MMR — Thane & Navi Mumbai">
+            <option value="Thane">Thane City</option>
+            <option value="Kalyan">Kalyan / Dombivli</option>
+            <option value="Ulhasnagar">Ulhasnagar / Ambarnath</option>
+            <option value="Badlapur">Badlapur / Murbad</option>
+            <option value="Bhiwandi">Bhiwandi / Shahapur</option>
+            <option value="Navi Mumbai">Navi Mumbai (Vashi / Nerul / Belapur)</option>
+            <option value="Panvel">Panvel / Kharghar / Airoli</option>
+          </optgroup>
+          <optgroup label="📍 MMR — Vasai-Virar / Palghar">
+            <option value="Vasai">Vasai / Virar</option>
+            <option value="Nalasopara">Nalasopara / Mira Road</option>
+            <option value="Bhayander">Bhayander / Mira-Bhayander</option>
+            <option value="Palghar">Palghar</option>
+            <option value="Boisar">Boisar / Dahanu</option>
+          </optgroup>
+          <optgroup label="📍 MMR — Raigad">
+            <option value="Alibag">Alibag / Raigad</option>
+            <option value="Pen">Pen</option>
+            <option value="Uran">Uran / Khopoli</option>
+            <option value="Karjat">Karjat / Mahad</option>
+          </optgroup>
+          <optgroup label="📍 Pune Region">
+            <option value="Pune">Pune City</option>
+            <option value="Pimpri-Chinchwad">Pimpri-Chinchwad</option>
+            <option value="Lonavala">Lonavala / Talegaon / Chakan</option>
+            <option value="Alandi">Alandi / Hadapsar / Wagholi</option>
+          </optgroup>
+          <optgroup label="Maharashtra — Other Districts">
+            <option value="Nashik">Nashik</option>
+            <option value="Aurangabad">Aurangabad (Chhatrapati Sambhajinagar)</option>
+            <option value="Nagpur">Nagpur</option>
+            <option value="Kolhapur">Kolhapur</option>
+            <option value="Solapur">Solapur</option>
+            <option value="Satara">Satara</option>
+            <option value="Sangli">Sangli</option>
+            <option value="Ahmednagar">Ahmednagar</option>
+            <option value="Latur">Latur</option>
+            <option value="Nanded">Nanded</option>
+            <option value="Jalgaon">Jalgaon</option>
+            <option value="Amravati">Amravati</option>
+            <option value="Akola">Akola</option>
+            <option value="Osmanabad">Osmanabad / Dharashiv</option>
+            <option value="Ratnagiri">Ratnagiri</option>
+            <option value="Sindhudurg">Sindhudurg</option>
+            <option value="Chandrapur">Chandrapur</option>
+            <option value="Gadchiroli">Gadchiroli</option>
+            <option value="Yavatmal">Yavatmal</option>
+            <option value="Wardha">Wardha</option>
+            <option value="Bhandara">Bhandara</option>
+            <option value="Gondia">Gondia</option>
+            <option value="Dhule">Dhule</option>
+            <option value="Nandurbar">Nandurbar</option>
+            <option value="Hingoli">Hingoli</option>
+            <option value="Parbhani">Parbhani</option>
+            <option value="Beed">Beed</option>
+            <option value="Buldhana">Buldhana</option>
+            <option value="Washim">Washim</option>
+          </optgroup>
+        </select>
+      </div>
     </div>
     <div class="form-group"><label>9वीतील अंदाजे % / Approx. % in 9th Std</label>
       <select id="stuMarks">

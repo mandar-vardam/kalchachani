@@ -75,6 +75,746 @@ INTEREST_COLOR = {
     'prashasan_rakshan':  '#374151',
 }
 
+# ─────────────────────────────────────────────
+# LOCATION → MMR REGION MAPPING
+# Maps student district to the nearest MMR hub (≤70 km radius)
+# ─────────────────────────────────────────────
+
+# Districts/talukas that fall within ~60-70 km of each MMR hub
+MMR_REGION_MAP = {
+    # Mumbai city & island
+    'mumbai':           'mumbai',
+    'mumbai city':      'mumbai',
+    'mumbai suburban':  'mumbai',
+    'south mumbai':     'mumbai',
+    'colaba':           'mumbai',
+    'fort':             'mumbai',
+    'dadar':            'mumbai',
+    'worli':            'mumbai',
+    'bandra':           'mumbai',
+    'andheri':          'mumbai',
+    'borivali':         'mumbai',
+    'malad':            'mumbai',
+    'goregaon':         'mumbai',
+    'kandivali':        'mumbai',
+    'dahisar':          'mumbai',
+    'kurla':            'mumbai',
+    'ghatkopar':        'mumbai',
+    'vikhroli':         'mumbai',
+    'mulund':           'mumbai',
+    'chembur':          'mumbai',
+    'mankhurd':         'mumbai',
+    'trombay':          'mumbai',
+    # Thane & surroundings (within 60 km of Thane)
+    'thane':            'thane',
+    'kalyan':           'thane',
+    'dombivli':         'thane',
+    'ulhasnagar':       'thane',
+    'ambarnath':        'thane',
+    'badlapur':         'thane',
+    'murbad':           'thane',
+    'shahapur':         'thane',
+    'bhiwandi':         'thane',
+    'navi mumbai':      'thane',
+    'nerul':            'thane',
+    'vashi':            'thane',
+    'belapur':          'thane',
+    'panvel':           'thane',
+    'kharghar':         'thane',
+    'airoli':           'thane',
+    'ghansoli':         'thane',
+    'kopar khairane':   'thane',
+    'turbhe':           'thane',
+    # Vasai-Virar / Palghar belt (within 60 km of Vasai)
+    'vasai':            'vasai',
+    'virar':            'vasai',
+    'nalasopara':       'vasai',
+    'nala sopara':      'vasai',
+    'palghar':          'vasai',
+    'boisar':           'vasai',
+    'dahanu':           'vasai',
+    'mira road':        'vasai',
+    'bhayander':        'vasai',
+    'vasai-virar':      'vasai',
+    'vasai virar':      'vasai',
+    # Raigad (within 70 km of Panvel/Raigad HQ)
+    'raigad':           'raigad',
+    'alibag':           'raigad',
+    'pen':              'raigad',
+    'uran':             'raigad',
+    'khopoli':          'raigad',
+    'karjat':           'raigad',
+    'mahad':            'raigad',
+    'mangaon':          'raigad',
+    # Pune (within 60 km of Pune city)
+    'pune':             'pune',
+    'pimpri':           'pune',
+    'chinchwad':        'pune',
+    'pimpri-chinchwad': 'pune',
+    'talegaon':         'pune',
+    'lonavala':         'pune',
+    'khed':             'pune',
+    'chakan':           'pune',
+    'dehu road':        'pune',
+    'alandi':           'pune',
+    'hadapsar':         'pune',
+    'wagholi':          'pune',
+    'katraj':           'pune',
+    'sinhagad':         'pune',
+}
+
+def get_mmr_region(district_raw: str) -> str:
+    """Return the MMR hub key for a district string, defaulting to 'mumbai'."""
+    key = district_raw.strip().lower()
+    return MMR_REGION_MAP.get(key, 'mumbai')
+
+
+# ─────────────────────────────────────────────
+# COLLEGE DATABASE — Location-aware, ranked best→good
+# Each region lists 10-15 top colleges per interest group
+# All colleges are within 60-70 km of the region hub
+# ─────────────────────────────────────────────
+
+COLLEGE_DB = {
+
+  # ══════════════════════════════════════════
+  # MUMBAI REGION (South Mumbai, Central, Western Suburbs)
+  # ══════════════════════════════════════════
+  'mumbai': {
+    'vigyan_tantra': [
+      '🥇 IIT Bombay, Powai — Premier engineering & technology (JEE Advanced)',
+      '🥈 VJTI (Veermata Jijabai Technological Institute), Matunga',
+      '🥉 ICT Mumbai (Institute of Chemical Technology), Matunga',
+      '4. UDCT / ICT affiliated — Pharmacy & Chemical Engineering',
+      '5. Fr. Conceicao Rodrigues College of Engineering (CRCE), Bandra',
+      '6. Thadomal Shahani Engineering College (TSEC), Bandra',
+      '7. K.J. Somaiya College of Engineering, Vidyavihar',
+      '8. Sardar Patel College of Engineering (SPCE), Andheri',
+      '9. Dwarkadas J. Sanghvi College of Engineering (DJSCE), Vile Parle',
+      '10. Ramrao Adik Institute of Technology (RAIT), Nerul',
+      '11. Vidyalankar Institute of Technology (VIT), Wadala',
+      '12. Rizvi College of Engineering, Bandra',
+      '13. Shah & Anchor Kutchhi Engineering College, Chembur',
+      '14. Don Bosco Institute of Technology (DBIT), Kurla',
+      '15. Atharva College of Engineering, Malad',
+    ],
+    'vanijya_udyog': [
+      '🥇 Sydenham College of Commerce & Economics, Churchgate — Top Commerce (Mumbai Univ)',
+      '🥈 H.R. College of Commerce & Economics, Churchgate',
+      '🥉 N.M. College of Commerce & Economics, Vile Parle',
+      '4. Jai Hind College, Churchgate — Commerce & Arts',
+      '5. K.C. College (Hyderabad Estate), Churchgate',
+      '6. Podar College of Commerce & Economics, Matunga',
+      '7. R.A. Podar College of Commerce, Matunga',
+      '8. Mithibai College of Arts, Science & Commerce, Vile Parle',
+      '9. Narsee Monjee College of Commerce, Vile Parle',
+      '10. Lala Lajpatrai College of Commerce & Economics, Mahalaxmi',
+      '11. Sathaye College, Vile Parle — Commerce',
+      '12. Guru Nanak Khalsa College, Matunga',
+      '13. VES College of Arts, Science & Commerce, Chembur',
+      '14. Bhavan\'s College, Andheri — Commerce',
+      '15. Wilson College, Chowpatty — Commerce',
+    ],
+    'kala_sahitya': [
+      '🥇 Sir J.J. School of Art, Byculla — Premier Fine Arts & Design',
+      '🥈 Xavier Institute of Communications (XIC), CST — Mass Media',
+      '🥉 Sophia College for Women, Breach Candy — Arts & Mass Media',
+      '4. Wilson College, Chowpatty — Arts / Literature',
+      '5. St. Xavier\'s College, CST — Arts & Humanities',
+      '6. Elphinstone College, Fort — Arts & Humanities',
+      '7. Mithibai College, Vile Parle — Arts & Literature',
+      '8. Ruia College, Matunga — Arts & Humanities',
+      '9. K.J. Somaiya College of Arts & Commerce, Vidyavihar',
+      '10. SNDT Women\'s University, Santacruz — Arts, Design',
+      '11. Rachana Sansad School of Art & Design, Prabhadevi',
+      '12. Sasmira\'s College of Arts, Science & Commerce, Worli',
+      '13. Sathaye College, Vile Parle — Arts',
+      '14. Jai Hind College, Churchgate — Arts & Media',
+      '15. Bhavan\'s College, Andheri — Journalism & Communication',
+    ],
+    'samaj_shikshan': [
+      '🥇 TISS (Tata Institute of Social Sciences), Deonar — Social Work (Autonomous)',
+      '🥈 SNDT Women\'s University, Santacruz — Education, Psychology',
+      '🥉 St. Xavier\'s College, CST — Sociology, Psychology',
+      '4. Sophia College for Women — Psychology, Sociology',
+      '5. Wilson College — Sociology & Political Science',
+      '6. Elphinstone College, Fort — Sociology, Political Science',
+      '7. Ruia College, Matunga — Psychology, Sociology',
+      '8. VES College of Arts, Chembur — Social Sciences',
+      '9. Nirmala Niketan College of Social Work, CST',
+      '10. College of Social Work, Nirmala Niketan, Fort',
+      '11. K.J. Somaiya College — Humanities & Education',
+      '12. Bhavan\'s College, Andheri — Arts & Psychology',
+      '13. Sathaye College, Vile Parle — Arts',
+      '14. D.Ed / B.Ed Colleges across Mumbai under Mumbai University',
+      '15. SNDT B.Ed College, Santacruz — Teacher Training',
+    ],
+    'arogya_seva': [
+      '🥇 Seth G.S. Medical College & KEM Hospital, Parel — Top Govt Medical',
+      '🥈 Grant Medical College & J.J. Hospital, Byculla — Govt Medical',
+      '🥉 Topiwala National Medical College (TNMC) & BYL Nair Hospital, Mumbai Central',
+      '4. Lokmanya Tilak Medical College (LTMC), Sion',
+      '5. K.J. Somaiya Medical College & Hospital, Sion',
+      '6. Bai Jerbai Wadia Hospital / Wadia Medical — Paediatrics',
+      '7. Bombay Hospital Medical College, Marine Lines',
+      '8. Sir H.N. Reliance Foundation Hospital — Allied Health',
+      '9. Haffkine Institute, Parel — Pharmacy & Biomedical',
+      '10. SNDT College of Nursing, Santacruz',
+      '11. St. George\'s Hospital Nursing College, CST',
+      '12. MAEER\'s Maharashtra Institute of Pharmacy, Pune Road',
+      '13. MGM Dental College, Navi Mumbai',
+      '14. TN Medical College & BYL Nair Hospital — Physiotherapy',
+      '15. Rajiv Gandhi Medical College, Thane (within 30 km)',
+    ],
+    'krushi_paryavaran': [
+      '🥇 ICT Mumbai — Environmental Science & Engineering',
+      '🥈 Bombay Natural History Society (BNHS), Hornbill House — Wildlife / Env',
+      '🥉 College of Fisheries, Palghar / Ratnagiri (affiliated DBATU)',
+      '4. VJTI Mumbai — Environmental Engineering',
+      '5. Rizvi College of Engineering — Environmental Engg',
+      '6. UDCT / ICT — Food Technology & Agri-Chemistry',
+      '7. SNDT College — Home Science / Food & Nutrition',
+      '8. Sathaye College — Environmental Studies',
+      '9. Sophia College — Life Sciences / Botany',
+      '10. St. Xavier\'s College — Zoology, Botany, Environment',
+      '11. Ruia College — Zoology, Botany',
+      '12. Wilson College — Life Sciences',
+      '13. K.J. Somaiya College of Science — Biotechnology, Environment',
+      '14. SNDT Women\'s University — Food Nutrition & Dietetics',
+      '15. Jai Hind College — Life Sciences',
+    ],
+    'prashasan_rakshan': [
+      '🥇 Government Law College, Churchgate — Top Law / UPSC',
+      '🥈 ILS Law College (affiliated) / Sydenham — Law & Political Science',
+      '🥉 K.C. Law College, Churchgate',
+      '4. Rizvi Law College, Bandra',
+      '5. New Law College, Bharati Vidyapeeth, Mumbai',
+      '6. NMIMS School of Law, Vile Parle',
+      '7. St. Xavier\'s College — Political Science & Civics',
+      '8. Elphinstone College — Political Science, History',
+      '9. Wilson College — Political Science',
+      '10. Podar College — Commerce (for Bank/MPSC prep)',
+      '11. Sydenham College — MPSC / Civil Services oriented Commerce',
+      '12. NDA (National Defence Academy) — via Khadakwasla, Pune (for Std XII boys)',
+      '13. Sainik School, Satara (entrance-based, residential)',
+      '14. Maharashtra Police Academy orientation — SPJ Sadhana College, Andheri',
+      '15. IDBI Bank / SBI affiliated coaching: Dadar Institute of Management Studies',
+    ],
+  },
+
+  # ══════════════════════════════════════════
+  # THANE / NAVI MUMBAI REGION (within 60 km of Thane station)
+  # Covers: Kalyan, Dombivli, Ulhasnagar, Ambarnath, Badlapur,
+  #         Navi Mumbai, Panvel, Bhiwandi, Shahapur
+  # ══════════════════════════════════════════
+  'thane': {
+    'vigyan_tantra': [
+      '🥇 VJTI Mumbai, Matunga (~30 km from Thane) — Top Engg',
+      '🥈 Lokmanya Tilak College of Engineering (LTCE), Kopar Khairane, Navi Mumbai',
+      '🥉 Pillai College of Engineering (PCE), New Panvel',
+      '4. SIES Graduate School of Technology, Nerul, Navi Mumbai',
+      '5. Thakur College of Engineering & Technology (TCET), Kandivali (40 km)',
+      '6. Terna Engineering College, Nerul, Navi Mumbai',
+      '7. Rajiv Gandhi Institute of Technology (RGIT), Andheri (~35 km)',
+      '8. K.C. College of Engineering & Management Studies, Kopri, Thane',
+      '9. Universal College of Engineering, Vasai (~50 km)',
+      '10. Datta Meghe College of Engineering, Airoli, Navi Mumbai',
+      '11. Guru Nanak Institutions Technical Campus, Ibrahimpatnam (~45 km)',
+      '12. Maharashtra Institute of Technology (MIT), Polytechnic — Thane',
+      '13. Saraswati College of Engineering, Kharghar, Navi Mumbai',
+      '14. Finolex Academy of Management & Technology, Ratnagiri (~via coastal)',
+      '15. Bharati Vidyapeeth College of Engineering, Navi Mumbai',
+    ],
+    'vanijya_udyog': [
+      '🥇 Sydenham College of Commerce, Churchgate (~32 km from Thane)',
+      '🥈 Ramniranjan Jhunjhunwala (RJ) College, Ghatkopar — Commerce',
+      '🥉 Vivekanand Education Society (VES) College, Chembur — Commerce',
+      '4. B.N. Bandodkar College of Science & Commerce, Thane',
+      '5. K.V. Pendharkar College of Arts, Science & Commerce, Dombivli',
+      '6. Rambhau Mhalgi Prabodhini — Governance & Policy, Thane',
+      '7. SIES College of Arts, Science & Commerce, Sion (~28 km)',
+      '8. Karmaveer Bhaurao Patil College (KBP), Vashi, Navi Mumbai',
+      '9. Pillai College of Arts, Commerce & Science, New Panvel',
+      '10. Dnyanasadhana College, Thane — Commerce',
+      '11. Saraswat College, Borivali (~40 km) — Commerce',
+      '12. Pace Junior Science College, Thane — Foundation for CA/CS',
+      '13. Vidyalankar College of Commerce, Wadala (~30 km)',
+      '14. Shri Chinai College, Andheri (~35 km) — Commerce',
+      '15. ICAI (CA Foundation) — Study Centres in Thane, Navi Mumbai',
+    ],
+    'kala_sahitya': [
+      '🥇 Sir J.J. School of Art, Byculla (~32 km) — Fine Arts & Design',
+      '🥈 XIC (Xavier Institute of Communications), CST (~32 km) — Mass Media',
+      '🥉 Rachana Sansad Academy of Fine Arts & Crafts, Dadar (~30 km)',
+      '4. B.N. Bandodkar College, Thane — Arts & Literature',
+      '5. K.V. Pendharkar College of Arts, Dombivli',
+      '6. Pillai College of Arts, Panvel — Journalism, Literature',
+      '7. SIES College of Arts, Sion — Literature, Mass Media',
+      '8. V.G. Vaze College, Mulund — Arts',
+      '9. Ramniranjan Jhunjhunwala College, Ghatkopar — Arts',
+      '10. Dnyanasadhana College, Thane — Arts',
+      '11. Chikitsak Samuha\'s RD National College, Bandra (~40 km) — Arts',
+      '12. Guru Nanak Khalsa College, Matunga (~30 km) — Arts',
+      '13. KBP College, Vashi — Arts & Communication',
+      '14. Mithibai College, Vile Parle (~35 km) — Mass Media',
+      '15. Jai Hind College, Churchgate (~35 km) — Media & Arts',
+    ],
+    'samaj_shikshan': [
+      '🥇 TISS (Tata Institute of Social Sciences), Deonar (~32 km) — Social Work',
+      '🥈 SNDT Women\'s University, Santacruz (~35 km) — Education, Psychology',
+      '🥉 B.N. Bandodkar College of Science, Thane — Psychology',
+      '4. K.V. Pendharkar College, Dombivli — Psychology, Sociology',
+      '5. Pilllai College, Panvel — Social Sciences',
+      '6. VES College, Chembur (~30 km) — Psychology',
+      '7. Ramniranjan Jhunjhunwala College, Ghatkopar — Social Sciences',
+      '8. KBP College, Vashi — Education & Social Work',
+      '9. Kalyan College, Kalyan — Arts & Social Sciences',
+      '10. Ulhasnagar College — Arts (Social Sciences)',
+      '11. Dombivli College — Arts & Education',
+      '12. Saraswati Education Society College, Kharghar — Social Work',
+      '13. D.Ed / B.Ed Colleges in Thane, Kalyan, Dombivli districts',
+      '14. Maharashtra College of Education, Thane — B.Ed',
+      '15. Nirmala Niketan College of Social Work, Fort (~32 km)',
+    ],
+    'arogya_seva': [
+      '🥇 Rajiv Gandhi Medical College & CSM Hospital, Thane',
+      '🥈 MGM Medical College & Hospital, Kamothe, Navi Mumbai',
+      '🥉 Sion Hospital (LTMC & GH), Sion (~30 km)',
+      '4. D.Y. Patil Medical College, Nerul, Navi Mumbai',
+      '5. MGM Dental College & Hospital, Kamothe',
+      '6. Terna Medical College, Nerul, Navi Mumbai',
+      '7. Grant Medical College (GS Medical), Byculla (~32 km)',
+      '8. Maharashtra University of Health Sciences (MUHS) affiliated — Panvel',
+      '9. Dr. D.Y. Patil Ayurved College (BAMS), Nerul',
+      '10. Thane Belapur Industrial Area — Allied Health Institutes',
+      '11. Apollo Pharmacy College, Navi Mumbai',
+      '12. Lokmanya Tilak Municipal Medical College, Sion (~30 km)',
+      '13. SIES College of Physiotherapy, Sion',
+      '14. Nursing Colleges — Thane Civil Hospital, KEM Thane',
+      '15. Pillai College of Pharmacy, New Panvel',
+    ],
+    'krushi_paryavaran': [
+      '🥇 Dr. Balasaheb Sawant Konkan Krishi Vidyapeeth, Dapoli (~120 km, regional best)',
+      '🥈 College of Fisheries, Shirgaon, Ratnagiri (DBSKKV affiliated)',
+      '🥉 VJTI Mumbai — Environmental Engineering (~32 km)',
+      '4. Pillai College of Engineering — Environmental Engg, Panvel',
+      '5. B.N. Bandodkar College — Zoology, Botany, Life Sciences, Thane',
+      '6. K.V. Pendharkar College — Life Sciences, Dombivli',
+      '7. SIES College, Sion — Biotechnology, Life Sciences',
+      '8. Terna College, Nerul — Environmental Science',
+      '9. V.G. Vaze College, Mulund — Botany, Zoology',
+      '10. Ramniranjan Jhunjhunwala College — Life Sciences',
+      '11. KBP College, Vashi — Environmental Science',
+      '12. Saraswati College, Kharghar — Life Sciences',
+      '13. Ulhasnagar College — Life Sciences / Agriculture',
+      '14. ICT Mumbai — Food Technology & Agri-Chemistry (~32 km)',
+      '15. SNDT College — Food Science & Nutrition (~35 km)',
+    ],
+    'prashasan_rakshan': [
+      '🥇 Government Law College, Churchgate (~32 km) — Law & UPSC prep',
+      '🥈 New Law College, Vashi, Navi Mumbai',
+      '🥉 School of Law, MIT-WPU, Navi Mumbai Campus',
+      '4. K.C. Law College, Churchgate (~32 km)',
+      '5. Pillai College, Panvel — Political Science',
+      '6. B.N. Bandodkar College, Thane — Political Science, History',
+      '7. K.V. Pendharkar College, Dombivli — Arts & Political Science',
+      '8. Kalyan College, Kalyan — Arts & Civics',
+      '9. Ulhasnagar College — Arts & Social Sciences',
+      '10. KBP College, Vashi — Commerce & Administration',
+      '11. VES College, Chembur — Political Science (~30 km)',
+      '12. NDA, Khadakwasla, Pune (~90 km — best for defence)',
+      '13. Sainik School Satara — residential, competitive entry',
+      '14. MPSC / UPSC coaching: Rambhau Mhalgi Prabodhini, Thane',
+      '15. Bank PO Prep: Datta Meghe Institute — Management Studies, Airoli',
+    ],
+  },
+
+  # ══════════════════════════════════════════
+  # VASAI-VIRAR / PALGHAR REGION
+  # Covers: Vasai, Virar, Nalasopara, Mira Road, Bhayander,
+  #         Palghar, Boisar, Dahanu (within 60 km)
+  # ══════════════════════════════════════════
+  'vasai': {
+    'vigyan_tantra': [
+      '🥇 Universal College of Engineering (UCOE), Kaman, Vasai',
+      '🥈 Shri L.R. Tiwari College of Engineering, Mira Road',
+      '🥉 Thakur College of Engineering & Technology (TCET), Kandivali (~35 km)',
+      '4. Atharva College of Engineering, Malad (~35 km)',
+      '5. Rizvi College of Engineering, Bandra (~50 km)',
+      '6. Sandip Institute of Technology, Nashik (~60 km)',
+      '7. Sardar Patel College of Engineering (SPCE), Andheri (~45 km)',
+      '8. Lokmanya Tilak College of Engineering, Kopar Khairane (~45 km)',
+      '9. VJTI, Matunga (~55 km via train) — Premier Engg',
+      '10. Bhagwan Mahavir Polytechnic, Vasai — Diploma',
+      '11. Government Polytechnic, Palghar',
+      '12. Maharashtra Academy of Engineering, Alandi (~65 km) — Polytechnic',
+      '13. Rajiv Gandhi Institute of Technology, Andheri (~45 km)',
+      '14. K.C. College of Engineering, Kopri, Thane (~40 km)',
+      '15. SIES Graduate School of Technology, Nerul (~50 km)',
+    ],
+    'vanijya_udyog': [
+      '🥇 Sydenham College of Commerce, Churchgate (~55 km) — Top Commerce',
+      '🥈 H.R. College, Churchgate (~55 km)',
+      '🥉 N.M. College, Vile Parle (~45 km)',
+      '4. Mithibai College, Vile Parle (~45 km) — Commerce',
+      '5. St. Gonsalo Garcia College of Arts & Commerce, Vasai',
+      '6. Fr. Agnel College of Arts & Commerce, Vasai',
+      '7. Gokhale Education Society\'s College, Palghar',
+      '8. Saraswat Education Society College, Borivali (~35 km)',
+      '9. Thakur College of Science & Commerce, Kandivali (~35 km)',
+      '10. Malini Kishor Sanghvi College, Vile Parle (~45 km)',
+      '11. Bhavan\'s College, Andheri (~48 km) — Commerce',
+      '12. ICAI Study Centre — Vasai Road, Mira Road',
+      '13. Bhagwan Mahavir College of Commerce & Management, Vasai',
+      '14. SNDT College, Santacruz (~50 km) — Commerce',
+      '15. Pace Junior Science College — Mira Road (Commerce)',
+    ],
+    'kala_sahitya': [
+      '🥇 Sir J.J. School of Art, Byculla (~55 km) — Fine Arts & Design',
+      '🥈 Rachana Sansad Academy of Fine Arts, Dadar (~50 km)',
+      '🥉 XIC Mumbai, CST (~55 km) — Mass Media & Journalism',
+      '4. Fr. Agnel College, Vasai — Arts & Literature',
+      '5. St. Gonsalo Garcia College, Vasai — Arts',
+      '6. Mithibai College, Vile Parle (~45 km) — Mass Media',
+      '7. Jai Hind College, Churchgate (~55 km) — Mass Media',
+      '8. Thakur College of Science & Commerce, Kandivali — Arts',
+      '9. Saraswat College, Borivali (~35 km) — Arts',
+      '10. N.M. College, Vile Parle — Mass Media',
+      '11. SNDT Women\'s University — Mass Comm & Design (~50 km)',
+      '12. Gokhale Education Society College, Palghar — Arts',
+      '13. Bhavan\'s College, Andheri (~48 km) — Arts',
+      '14. Bhagwan Mahavir College, Vasai — Arts & Humanities',
+      '15. Government Diploma in Art, Vasai (State Art School)',
+    ],
+    'samaj_shikshan': [
+      '🥇 TISS, Deonar (~55 km) — Social Work (Best in India)',
+      '🥈 SNDT Women\'s University, Santacruz (~50 km) — Education',
+      '🥉 Fr. Agnel College, Vasai — Social Sciences & Psychology',
+      '4. St. Gonsalo Garcia College, Vasai — Psychology & Sociology',
+      '5. Gokhale Education Society College, Palghar — Arts',
+      '6. Saraswat College, Borivali (~35 km) — Psychology',
+      '7. Thakur College, Kandivali — Arts & Social Sciences',
+      '8. VES College, Chembur (~50 km) — Social Sciences',
+      '9. Mithibai College, Vile Parle (~45 km) — Psychology',
+      '10. St. Xavier\'s College, CST (~55 km) — Social Work',
+      '11. D.Ed / B.Ed Colleges in Vasai, Virar, Palghar',
+      '12. Maharashtra College of Education — Vasai-Virar',
+      '13. Wilson College, Chowpatty (~55 km) — Sociology',
+      '14. St. Andrew\'s College, Bandra (~50 km) — Sociology',
+      '15. KVNNS College, Dahanu — Arts & Social Sciences',
+    ],
+    'arogya_seva': [
+      '🥇 Rajiv Gandhi Medical College, Thane (~30 km)',
+      '🥈 Vedic Sansthan Ayurvedic Medical College (BAMS), Vasai',
+      '🥉 Holy Family Hospital & Medical Research Centre, Bandra (~50 km)',
+      '4. Dr. D.Y. Patil Medical College, Nerul (~45 km)',
+      '5. Grant Medical College (J.J. Hospital), Byculla (~55 km)',
+      '6. MGM Medical College, Kamothe (~55 km)',
+      '7. Terna Medical College, Nerul (~45 km)',
+      '8. St. Luke\'s Hospital Nursing College, Andheri (~45 km)',
+      '9. Palghar District Civil Hospital — Nursing & Allied Health',
+      '10. Boisar Government Medical Resources — Nursing Training',
+      '11. Bhagwan Mahavir Pharmacy College, Vasai',
+      '12. Pillai College of Pharmacy, New Panvel (~55 km)',
+      '13. SNDT Nursing College, Santacruz (~50 km)',
+      '14. MGM Dental College, Kamothe (~55 km)',
+      '15. Physiotherapy College — Central India Institute, Mira Road',
+    ],
+    'krushi_paryavaran': [
+      '🥇 Govind Ballabh Pant College of Agriculture, Pantnagar (~regional, NW)',
+      '🥈 DBSKKV College of Fisheries, Dapoli (~120 km — nearest agri univ)',
+      '🥉 Gokhale Education Society\'s Nature & Science College, Palghar',
+      '4. Fr. Agnel College, Vasai — Life Sciences & Environment',
+      '5. St. Gonsalo Garcia College, Vasai — Zoology, Botany',
+      '6. Saraswat College, Borivali — Life Sciences (~35 km)',
+      '7. Thakur College, Kandivali — Environmental Science',
+      '8. V.G. Vaze College, Mulund (~40 km) — Botany, Zoology',
+      '9. ICT Mumbai — Environmental & Chemical Engineering (~55 km)',
+      '10. VJTI — Environmental Engineering (~55 km)',
+      '11. Wilson College — Life Sciences (~55 km)',
+      '12. Government Agriculture Office Training, Palghar — Extension',
+      '13. Boisar Agri Research Centre (BARC support area) — Environment',
+      '14. SNDT College — Food Science & Nutrition (~50 km)',
+      '15. Bhagwan Mahavir College — Life Sciences, Vasai',
+    ],
+    'prashasan_rakshan': [
+      '🥇 Government Law College, Churchgate (~55 km) — Law & MPSC/UPSC',
+      '🥈 Fr. Agnel College, Vasai — Arts (Political Science)',
+      '🥉 St. Gonsalo Garcia College, Vasai — Arts & Civics',
+      '4. Gokhale Education Society College, Palghar — Arts & History',
+      '5. Thakur College, Kandivali (~35 km) — Arts & Political Science',
+      '6. Saraswat College, Borivali (~35 km) — Political Science',
+      '7. Atharva Law School / NMD College of Law, Malad (~38 km)',
+      '8. K.C. Law College, Churchgate (~55 km)',
+      '9. New Law College, Vashi (~50 km)',
+      '10. Bhavan\'s College, Andheri (~48 km) — Political Science',
+      '11. NDA, Khadakwasla, Pune (~110 km — best for defence)',
+      '12. MPSC Coaching: Mira Road Institute of Management & Civil Services',
+      '13. Rambhau Mhalgi Prabodhini, Thane (~30 km) — Governance Studies',
+      '14. IBPS / SBI PO prep: Tutorials in Virar & Nalasopara',
+      '15. Sainik School Satara — residential, national competitive entry',
+    ],
+  },
+
+  # ══════════════════════════════════════════
+  # RAIGAD REGION (Alibag, Pen, Panvel, Khopoli, Karjat, Uran)
+  # ══════════════════════════════════════════
+  'raigad': {
+    'vigyan_tantra': [
+      '🥇 Pillai College of Engineering, New Panvel (~30 km from Alibag via Nhava)',
+      '🥈 SIES Graduate School of Technology, Nerul, Navi Mumbai (~35 km)',
+      '🥉 Terna Engineering College, Nerul (~35 km)',
+      '4. Lokmanya Tilak College of Engineering, Kopar Khairane (~30 km)',
+      '5. D.Y. Patil College of Engineering, Navi Mumbai (~32 km)',
+      '6. Bharati Vidyapeeth College of Engineering, CBD Belapur (~28 km)',
+      '7. MIT College of Engineering, Pune (~80 km — best for Karjat/Khopoli)',
+      '8. Saraswati College of Engineering, Kharghar',
+      '9. MGM College of Engineering, Navi Mumbai',
+      '10. VJTI, Matunga (~50 km via Panvel) — Premier',
+      '11. Datta Meghe College of Engineering, Airoli (~28 km)',
+      '12. SIES Polytechnic, Sion (~45 km) — Diploma',
+      '13. Government Polytechnic, Alibag',
+      '14. Government Polytechnic, Khopoli',
+      '15. Finolex Institute of Technology, Ratnagiri (~150 km — best coastal)',
+    ],
+    'vanijya_udyog': [
+      '🥇 Sydenham College, Churchgate (~55 km via ferry+rail) — Top Commerce',
+      '🥈 Pillai College of Arts, Commerce & Science, New Panvel',
+      '🥉 KBP College of Arts, Commerce & Science, Vashi (~28 km)',
+      '4. D.Y. Patil International University, Navi Mumbai — Commerce',
+      '5. Saraswati Education Society College, Kharghar',
+      '6. H.R. College, Churchgate (~55 km) — Commerce',
+      '7. N.M. College, Vile Parle (~50 km) — Commerce',
+      '8. Terna College of Commerce, Nerul (~30 km)',
+      '9. Guru Nanak College, Navi Mumbai — Commerce',
+      '10. Pen College, Pen — Arts & Commerce (Raigad dist)',
+      '11. MGM College, Navi Mumbai — Commerce',
+      '12. ICAI — Study Centre, Kharghar / Navi Mumbai',
+      '13. Alibag College — Commerce',
+      '14. Mahad College — Commerce (South Raigad)',
+      '15. Bharati Vidyapeeth Commerce College, CBD Belapur',
+    ],
+    'kala_sahitya': [
+      '🥇 Sir J.J. School of Art, Byculla (~50 km) — Fine Arts',
+      '🥈 XIC Mumbai, CST (~55 km) — Mass Media',
+      '🥉 Rachana Sansad, Dadar (~48 km) — Fine Arts & Design',
+      '4. Pillai College, New Panvel — Arts & Literature',
+      '5. KBP College, Vashi — Arts & Journalism',
+      '6. Terna College, Nerul — Arts',
+      '7. MGM College, Navi Mumbai — Humanities',
+      '8. Alibag College, Alibag — Arts (Local)',
+      '9. Pen College, Pen — Arts (Local)',
+      '10. Saraswati College, Kharghar — Arts',
+      '11. Mithibai College, Vile Parle (~50 km) — Mass Media',
+      '12. Sophia College, Mumbai (~52 km) — Mass Media',
+      '13. SNDT Women\'s University (~52 km) — Mass Comm',
+      '14. D.Y. Patil University — Mass Comm, Navi Mumbai',
+      '15. Mahad College, Mahad — Arts',
+    ],
+    'samaj_shikshan': [
+      '🥇 TISS, Deonar (~45 km) — Social Work (Premier)',
+      '🥈 SNDT Women\'s University (~52 km) — Education',
+      '🥉 Pillai College, New Panvel — Social Sciences',
+      '4. KBP College, Vashi — Social Work, Psychology',
+      '5. Saraswati College, Kharghar — Psychology',
+      '6. D.Y. Patil University, Navi Mumbai — Social Sciences',
+      '7. MGM College — Social Sciences',
+      '8. Alibag College, Alibag — Arts (Sociology, Pol Sci)',
+      '9. Pen College, Pen — Sociology',
+      '10. Mahad College — Arts',
+      '11. VES College, Chembur (~45 km) — Psychology',
+      '12. Terna College, Nerul — Arts',
+      '13. D.Ed / B.Ed Colleges in Alibag, Pen, Panvel',
+      '14. Karjat College, Karjat — Arts',
+      '15. Nirmala Niketan College of Social Work (~52 km)',
+    ],
+    'arogya_seva': [
+      '🥇 MGM Medical College & Hospital, Kamothe, Navi Mumbai',
+      '🥈 D.Y. Patil Medical College, Nerul, Navi Mumbai',
+      '🥉 Terna Medical College, Nerul, Navi Mumbai',
+      '4. Rajiv Gandhi Medical College, Thane (~35 km)',
+      '5. Grant Medical College (J.J. Hospital), Byculla (~52 km)',
+      '6. MGM Dental College, Kamothe',
+      '7. Dr. D.Y. Patil Ayurved College (BAMS), Nerul',
+      '8. Alibag District Civil Hospital — Nursing & Allied Health',
+      '9. Khopoli & Karjat Government Medical Resources',
+      '10. MGM School of Nursing, Navi Mumbai',
+      '11. Pillai College of Pharmacy, New Panvel',
+      '12. Navi Mumbai Municipal Corporation — Nursing Training',
+      '13. SIES Physiotherapy College, Sion (~45 km)',
+      '14. Maharashtra University of Health Sciences (MUHS) — affiliated Panvel',
+      '15. Rural Medical College / Ayurveda, Alibag (upcoming)',
+    ],
+    'krushi_paryavaran': [
+      '🥇 DBSKKV College of Fisheries, Dapoli (~100 km — nearest specialized)',
+      '🥈 ICT Mumbai — Environmental Engineering (~52 km)',
+      '🥉 Pillai College of Engineering — Environmental Engg, Panvel',
+      '4. SIES College — Biotechnology, Nerul',
+      '5. KBP College, Vashi — Life Sciences, Environment',
+      '6. MGM College — Environmental Science',
+      '7. Alibag College — Botany, Zoology',
+      '8. Mahad College — Life Sciences',
+      '9. VJTI — Environmental Engineering (~50 km)',
+      '10. D.Y. Patil University — Environmental Science',
+      '11. Pen College — Botany, Life Sciences',
+      '12. Karjat College — Agriculture & Environment',
+      '13. ICT Mumbai — Food Technology (~52 km)',
+      '14. Kharghar College — Environmental Studies',
+      '15. SNDT College — Food Science (~52 km)',
+    ],
+    'prashasan_rakshan': [
+      '🥇 Government Law College, Churchgate (~52 km) — Law, UPSC/MPSC',
+      '🥈 New Law College, Vashi (~25 km)',
+      '🥉 Pillai College, Panvel — Political Science, Arts',
+      '4. KBP College, Vashi — Commerce, Administration',
+      '5. Alibag College — Political Science, History',
+      '6. Pen College — Arts & Political Science',
+      '7. MGM Institute of Management — Navi Mumbai',
+      '8. K.C. Law College, Churchgate (~52 km)',
+      '9. NDA, Khadakwasla, Pune (~90 km — for defence aspirants)',
+      '10. Sainik School, Satara — competitive entry, residential',
+      '11. D.Y. Patil University — Law & Governance, Navi Mumbai',
+      '12. MPSC Coaching: Rambhau Mhalgi Prabodhini, Thane (~35 km)',
+      '13. Karjat College — Political Science',
+      '14. Mahad College — Arts & Civics',
+      '15. IBPS/SBI PO Prep — Kharghar & Panvel Tutorials',
+    ],
+  },
+
+  # ══════════════════════════════════════════
+  # PUNE REGION (within 60 km of Pune city)
+  # Covers: Pimpri-Chinchwad, Lonavala, Talegaon, Chakan, Alandi, Hadapsar
+  # ══════════════════════════════════════════
+  'pune': {
+    'vigyan_tantra': [
+      '🥇 College of Engineering Pune (COEP Technological University), Shivajinagar',
+      '🥈 Vishwakarma Institute of Technology (VIT), Bibwewadi',
+      '🥉 MIT College of Engineering (MITCOE), Kothrud, Pune',
+      '4. Army Institute of Technology (AIT), Dighi Hills, Pune',
+      '5. Pune Institute of Computer Technology (PICT), Dhankawadi',
+      '6. Symbiosis Institute of Technology (SIT), Lavale, Pune',
+      '7. Zeal College of Engineering & Research, Narhe',
+      '8. Maharashtra Institute of Technology (MIT), Kothrud',
+      '9. Sinhgad College of Engineering, Vadgaon, Pune',
+      '10. Dr. D.Y. Patil Institute of Technology, Pimpri',
+      '11. Indira College of Engineering & Management, Parandwadi',
+      '12. Ajeenkya DY Patil University, Charoli, Pune',
+      '13. Modern Education Society\'s College of Engineering, Pune',
+      '14. International Institute of Information Technology (I²IT), Hinjewadi',
+      '15. JSPM\'s RSCOE (Rajarshi Shahu College of Engineering), Tathawade',
+    ],
+    'vanijya_udyog': [
+      '🥇 Symbiosis College of Arts & Commerce, Senapati Bapat Road — Top Commerce',
+      '🥈 Fergusson College (autonomous), Deccan Gymkhana — Commerce',
+      '🥉 Brihan Maharashtra College of Commerce (BMCC), Deccan',
+      '4. Nowrosjee Wadia College of Arts & Science, Pune — Commerce',
+      '5. SP College (Sir Parashurambhau College), Tilak Road',
+      '6. Gokhale Institute of Politics & Economics, Deccan — Economics',
+      '7. Savitribai Phule Pune University Dept of Commerce',
+      '8. Indira College of Commerce & Science, Paud Road',
+      '9. ICAI (CA Foundation) — Pune Branches (Camp, Deccan)',
+      '10. Modern College of Arts, Science & Commerce, Shivajinagar',
+      '11. Abhinav Education Society\'s College, Narhe — Commerce',
+      '12. Abasaheb Garware College, Karve Road — Commerce',
+      '13. Symbiosis Centre for Management Studies (SCMS), Pune',
+      '14. Deccan Education Society\'s Wrangler R.P. Paranjpe College (Tilak Rd)',
+      '15. Bharati Vidyapeeth College of Commerce, Katraj',
+    ],
+    'kala_sahitya': [
+      '🥇 Film & Television Institute of India (FTII), Law College Road — Film & TV',
+      '🥈 Abhinav Kala Mahavidyalaya (Abhinav Art College), Shivajinagar — Fine Arts',
+      '🥉 MIT School of Design, Kothrud — Design & Visual Arts',
+      '4. Symbiosis Institute of Media & Communication (SIMC), Lavale',
+      '5. Fergusson College — Marathi & English Literature',
+      '6. SP College — Arts & Literature',
+      '7. Modern College of Arts — Journalism & Mass Comm',
+      '8. Gokhale Institute — Economics & Humanities',
+      '9. Pune Institute of Fine Arts, Deccan',
+      '10. MIT Art, Design & Technology University, Rajbaug',
+      '11. Savitribai Phule Pune University — Marathi, Hindi, English Depts',
+      '12. Deccan College Post-Graduate Research Institute — Linguistics',
+      '13. Indira College — Journalism & Mass Comm',
+      '14. Abasaheb Garware College — Mass Comm',
+      '15. Sinhgad College of Arts & Commerce — Mass Comm',
+    ],
+    'samaj_shikshan': [
+      '🥇 Tata Institute of Social Sciences (TISS) Pune Campus, Yerwada',
+      '🥈 Gokhale Institute of Politics & Economics — Social Sciences',
+      '🥉 Fergusson College — Psychology, Sociology, Political Science',
+      '4. SP College — Sociology, Political Science',
+      '5. SNDT Women\'s University Pune Campus — Education & Social Work',
+      '6. Savitribai Phule Pune University — Psychology Dept',
+      '7. Symbiosis College of Arts — Sociology, Psychology',
+      '8. Modern College — Psychology, Sociology',
+      '9. B.Ed Colleges affiliated Pune University (50+ institutions)',
+      '10. Abasaheb Garware College — Psychology',
+      '11. Brihan Maharashtra College of Commerce — Economics',
+      '12. Symbiosis Institute of Health Sciences — Social Health',
+      '13. Shrimati Nathibai Damodar Thackersey College, Pune',
+      '14. Nowrosjee Wadia College — Sociology, Psychology',
+      '15. Jnana Prabodhini Prashala — Education Research, Sadashiv Peth',
+    ],
+    'arogya_seva': [
+      '🥇 B.J. Government Medical College & Sassoon Hospital, Pune — Top Govt Medical',
+      '🥈 Armed Forces Medical College (AFMC), Wanowrie, Pune',
+      '🥉 D.Y. Patil Medical College, Pimpri',
+      '4. Bharati Vidyapeeth Medical College & Hospital, Katraj',
+      '5. Deenanath Mangeshkar Hospital Medical School',
+      '6. MGM Medical College, Aurangabad (for reference)',
+      '7. KEM Hospital Pune — Allied Health',
+      '8. College of Ayurveda (BAMS) — Tilak Ayurved College, Pune',
+      '9. Pune Institute of Medical Sciences',
+      '10. Mahatma Gandhi Vidyamandir Dental College, Panchavati',
+      '11. Dr. D.Y. Patil Dental College, Pimpri',
+      '12. BVDU Dental College, Katraj',
+      '13. Bharati Vidyapeeth Nursing College, Katraj',
+      '14. MIT School of Nursing, Kothrud',
+      '15. Symbiosis Institute of Health Sciences, Lavale',
+    ],
+    'krushi_paryavaran': [
+      '🥇 Mahatma Phule Krishi Vidyapeeth (MPKV), Rahuri (~90 km — regional HQ)',
+      '🥈 College of Agriculture, Pune (MPKV affiliated), Shivajinagar',
+      '🥉 COEP — Environmental Engineering, Shivajinagar',
+      '4. MIT College — Environmental Engg, Kothrud',
+      '5. Fergusson College — Botany, Zoology, Environmental Science',
+      '6. SP College — Life Sciences, Botany',
+      '7. Modern College — Zoology, Botany, Environmental Sci',
+      '8. Nowrosjee Wadia College — Life Sciences',
+      '9. Gokhale Institute — Agricultural Economics',
+      '10. Symbiosis Institute of Technology — Environmental Engineering',
+      '11. National Chemical Laboratory (NCL), Homi Bhabha Road — Research',
+      '12. ICAR-Agharkar Research Institute, Pune — Agriculture & Biotech',
+      '13. College of Fisheries, Shirgaon (~130 km — nearest fisheries)',
+      '14. Abasaheb Garware College — Environmental Science',
+      '15. Sinhgad Institutes — Environmental Science, Vadgaon',
+    ],
+    'prashasan_rakshan': [
+      '🥇 NDA (National Defence Academy), Khadakwasla, Pune — Best for Defence',
+      '🥈 ILS Law College, Law College Road, Pune — Law & Civil Services',
+      '🥉 New Law College, Bharati Vidyapeeth, Pune',
+      '4. Symbiosis Law School, Viman Nagar',
+      '5. Fergusson College — Political Science, History',
+      '6. SP College — Political Science, History',
+      '7. YASHADA (Yashwantrao Chavan Academy of Development Administration) — Governance',
+      '8. Gokhale Institute — Public Policy & Economics',
+      '9. Modern College — Political Science',
+      '10. Nowrosjee Wadia College — Political Science',
+      '11. MIT School of Government, Pune',
+      '12. Indira College of Law, Paud Road',
+      '13. Dr. D.Y. Patil Law College, Pimpri',
+      '14. MPSC / UPSC Coaching: Aishwarya IAS Academy, Deccan',
+      '15. Sainik School, Satara (~90 km) — residential, competitive entry',
+    ],
+  },
+}
+
+def get_colleges_for_location(district_raw: str, interest_group: str) -> list:
+    """Return ranked list of 10-15 colleges for a given district and interest group."""
+    region = get_mmr_region(district_raw)
+    region_data = COLLEGE_DB.get(region, COLLEGE_DB['mumbai'])
+    return region_data.get(interest_group, [])
+
+
 CAREER_MAP = {
     'vigyan_tantra': {
         'stream': 'Science — PCM (भौतिकशास्त्र, रसायनशास्त्र, गणित)',
@@ -85,7 +825,7 @@ CAREER_MAP = {
             'Architect / Urban Planner',
             'Research Scientist / Physicist',
         ],
-        'colleges': ['IIT', 'VJTI Mumbai', 'COEP Pune', 'NIT', 'SP College Pune'],
+        'colleges': [],  # populated dynamically from COLLEGE_DB
         'description': (
             'तुम्हाला विज्ञान, गणित आणि तंत्रज्ञानामध्ये विशेष रुची आहे. '
             'अभियांत्रिकी, संगणक विज्ञान आणि संशोधन क्षेत्र तुमच्यासाठी योग्य आहे.'
@@ -100,7 +840,7 @@ CAREER_MAP = {
             'Startup Founder / Entrepreneur',
             'Marketing & Brand Manager',
         ],
-        'colleges': ['Sydenham College Mumbai', 'H.R. College Mumbai', 'Fergusson Pune', 'ICAI', 'Symbiosis Pune'],
+        'colleges': [],
         'description': (
             'तुम्हाला व्यापार, अर्थकारण आणि उद्योग यामध्ये रुची आहे. '
             'वाणिज्य शाखा तुमच्यासाठी सर्वोत्तम — CA, व्यवसाय व उद्योजकता क्षेत्रात भरपूर संधी आहेत.'
@@ -115,7 +855,7 @@ CAREER_MAP = {
             'Musician / Visual Artist / Photographer',
             'Mass Communication / Media Professional',
         ],
-        'colleges': ['FTII Pune', 'Symbiosis Mass Comm Pune', 'XIC Mumbai', 'JJ School of Art Mumbai'],
+        'colleges': [],
         'description': (
             'तुमच्यामध्ये सर्जनशीलता आणि कला-साहित्याची आवड आहे. '
             'माध्यम, लेखन, डिझाईन आणि ललित कला क्षेत्रात उत्तम करिअर घडवू शकता.'
@@ -130,7 +870,7 @@ CAREER_MAP = {
             'HR Manager / Corporate Trainer',
             'Community Development Officer',
         ],
-        'colleges': ['TISS Mumbai', 'D.Ed / B.Ed Colleges', 'Fergusson Pune', 'SNDT Mumbai'],
+        'colleges': [],
         'description': (
             'तुम्हाला लोकांशी संवाद साधणे, शिकवणे आणि समाजसेवा करणे आवडते. '
             'शिक्षण, समाजकार्य, मानसशास्त्र आणि HR क्षेत्रात उत्तम भवितव्य आहे.'
@@ -145,7 +885,7 @@ CAREER_MAP = {
             'Dentist / Ayurvedic Practitioner (BAMS)',
             'Public Health Officer',
         ],
-        'colleges': ['AIIMS', 'BJ Medical Pune', 'KEM Mumbai', 'Govt Medical Colleges MH', 'BAMS Colleges'],
+        'colleges': [],
         'description': (
             'तुम्हाला आरोग्यसेवा आणि माणसांच्या कल्याणाची आवड आहे. '
             'वैद्यकीय क्षेत्र — MBBS, BAMS, Pharmacy, Nursing — तुमच्यासाठी आदर्श आहे.'
@@ -160,7 +900,7 @@ CAREER_MAP = {
             'Veterinary Doctor',
             'Farm Entrepreneur / Agri-Business Manager',
         ],
-        'colleges': ['MPKV Rahuri', 'Pune Agriculture College', 'Konkan KV', 'Forest Research Institute', 'Nagpur Agri College'],
+        'colleges': [],
         'description': (
             'तुम्हाला शेती, निसर्ग आणि पर्यावरणाची आवड आहे. '
             'कृषी विज्ञान, वनशास्त्र आणि पर्यावरण अभियांत्रिकीत उत्तम भवितव्य आहे.'
@@ -175,7 +915,7 @@ CAREER_MAP = {
             'Bank Officer (IBPS / SBI PO)',
             'Administrative Officer / Clerk',
         ],
-        'colleges': ['NDA Khadakwasla', 'MPSC Prep Institutes', 'Law Colleges (LLB)', 'Fergusson / SP College Pune'],
+        'colleges': [],
         'description': (
             'तुम्हाला नेतृत्व, शिस्त, प्रशासन आणि देशसेवेची आवड आहे. '
             'MPSC/UPSC, NDA, पोलीस सेवा आणि बँकिंग क्षेत्रात उत्तम यश मिळवू शकता.'
@@ -288,10 +1028,18 @@ def score_submission(data):
         subjects[trait] = avg_score(r, keys)
 
     top_group    = max(interests, key=interests.get)
-    career_match = CAREER_MAP.get(top_group, {
+    district_raw = data.get('student', {}).get('district', 'Mumbai')
+    career_match = dict(CAREER_MAP.get(top_group, {
         'stream': 'मार्गदर्शन आवश्यक', 'careers': ['Counselling recommended'],
-        'colleges': ['School counsellor'], 'description': 'Detailed counselling needed.',
-    })
+        'colleges': [], 'description': 'Detailed counselling needed.',
+    }))
+    # Inject location-specific ranked college list (10-15 colleges within 60-70 km)
+    career_match['colleges'] = get_colleges_for_location(district_raw, top_group)
+    # Store per-group colleges for all interest groups
+    all_group_colleges = {
+        grp: get_colleges_for_location(district_raw, grp)
+        for grp in INTEREST_GROUPS
+    }
 
     stream_map = {
         'science_pcm': 'Science (PCM)',
@@ -309,6 +1057,7 @@ def score_submission(data):
         'skills':               skills,
         'subjects':             subjects,
         'career_match':         career_match,
+        'all_group_colleges':   all_group_colleges,
         'student_stream_choice': stream_map.get(r.get('stream_choice', ''), r.get('stream_choice', '—')),
         'top_skills':    sorted(skills.items(),   key=lambda x: x[1], reverse=True)[:3],
         'top_subjects':  sorted(subjects.items(), key=lambda x: x[1], reverse=True)[:2],
@@ -534,7 +1283,12 @@ def generate_report_html(record, charts):
     ])
 
     career_list  = ''.join([f'<li>{c}</li>'              for c in cm.get('careers',[])])
-    college_list = ''.join([f'<span class="tag">{c}</span>' for c in cm.get('colleges',[])])
+    district_raw = s.get('district', 'Mumbai')
+    colleges_for_report = cm.get('colleges', []) or get_colleges_for_location(district_raw, top)
+    college_list = ''.join([
+        f'<div style="padding:6px 10px;border-bottom:1px solid #F0EBE0;font-size:12.5px;color:#1A2E52;line-height:1.5">{c}</div>'
+        for c in colleges_for_report
+    ])
     fields_list  = ''.join([f'<span class="tag">{f.replace("_"," ").title()}</span>'
                             for f in sc.get('career_fields',[])])
     submitted_dt = record.get('submitted_at','')[:10]
@@ -611,7 +1365,7 @@ img.chart{{width:100%;border-radius:10px;border:1px solid #eee}}
         <p>{cm.get('description','')}</p>
         <div style="margin-bottom:8px"><strong style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px">Top Career Paths</strong></div>
         <ul>{career_list}</ul>
-        <div style="margin-top:12px"><strong style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px">Suggested Colleges / Institutes</strong><div style="margin-top:5px">{college_list}</div></div>
+        <div style="margin-top:12px"><strong style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px">📍 Colleges Near {s.get('district','Your Location')} (≤60-70 km) — Best to Good</strong><div style="margin-top:6px;border:1px solid #F0EBE0;border-radius:8px;overflow:hidden">{college_list}</div></div>
       </div>
       <div style="font-size:12px;color:#888;padding-left:4px">★ विद्यार्थ्याची स्वतःची पसंती: <strong>{sc.get('student_stream_choice','—')}</strong></div>
     </div>
@@ -685,7 +1439,12 @@ def generate_student_report_html(record, charts):
     top_color = INTEREST_COLOR.get(top, '#E8671A')
 
     career_list  = ''.join([f'<li>{c}</li>' for c in cm.get('careers', [])])
-    college_list = ''.join([f'<span class="tag">{c}</span>' for c in cm.get('colleges', [])])
+    district_raw_s = s.get('district', 'Mumbai')
+    colleges_for_student = cm.get('colleges', []) or get_colleges_for_location(district_raw_s, top)
+    college_list = ''.join([
+        f'<div style="padding:8px 12px;border-bottom:1px solid #F5EFE6;font-size:13px;color:#1A2E52;line-height:1.6">{c}</div>'
+        for c in colleges_for_student
+    ])
     submitted_dt = record.get('submitted_at', '')[:10]
     strengths    = ', '.join([SKILL_LABELS_FULL[k] for k, v in sc['top_skills']])
 
@@ -801,8 +1560,8 @@ img.chart{{width:100%;border-radius:10px;border:1px solid #eee}}
         <div style="margin-bottom:10px"><strong style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px">Top Career Paths तुमच्यासाठी</strong></div>
         <ul>{career_list}</ul>
         <div style="margin-top:14px">
-          <strong style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px">Suggested Colleges / Institutes</strong>
-          <div style="margin-top:6px">{college_list}</div>
+          <strong style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px">📍 तुमच्या जवळचे महाविद्यालय / Colleges Near {s.get('district','Your Location')} (≤60-70 km) — सर्वोत्तम क्रमाने</strong>
+          <div style="margin-top:8px;border:1px solid #F0EBE0;border-radius:10px;overflow:hidden;background:#FFFDF9">{college_list or '<div style="padding:12px;color:#888;font-size:13px">Location-specific list not available.</div>'}</div>
         </div>
       </div>
       <p style="font-size:12px;color:#999;padding-left:4px">★ तुमची स्वतःची पसंती: <strong style="color:#1A2E52">{sc.get('student_stream_choice','—')}</strong></p>
