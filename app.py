@@ -1439,12 +1439,6 @@ def generate_student_report_html(record, charts):
     top_color = INTEREST_COLOR.get(top, '#E8671A')
 
     career_list  = ''.join([f'<li>{c}</li>' for c in cm.get('careers', [])])
-    district_raw_s = s.get('district', 'Mumbai')
-    colleges_for_student = cm.get('colleges', []) or get_colleges_for_location(district_raw_s, top)
-    college_list = ''.join([
-        f'<div style="padding:8px 12px;border-bottom:1px solid #F5EFE6;font-size:13px;color:#1A2E52;line-height:1.6">{c}</div>'
-        for c in colleges_for_student
-    ])
     submitted_dt = record.get('submitted_at', '')[:10]
     strengths    = ', '.join([SKILL_LABELS_FULL[k] for k, v in sc['top_skills']])
 
@@ -1559,10 +1553,6 @@ img.chart{{width:100%;border-radius:10px;border:1px solid #eee}}
         <p>{cm.get('description','')}</p>
         <div style="margin-bottom:10px"><strong style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px">Top Career Paths तुमच्यासाठी</strong></div>
         <ul>{career_list}</ul>
-        <div style="margin-top:14px">
-          <strong style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px">📍 तुमच्या जवळचे महाविद्यालय / Colleges Near {s.get('district','Your Location')} (≤60-70 km) — सर्वोत्तम क्रमाने</strong>
-          <div style="margin-top:8px;border:1px solid #F0EBE0;border-radius:10px;overflow:hidden;background:#FFFDF9">{college_list or '<div style="padding:12px;color:#888;font-size:13px">Location-specific list not available.</div>'}</div>
-        </div>
       </div>
       <p style="font-size:12px;color:#999;padding-left:4px">★ तुमची स्वतःची पसंती: <strong style="color:#1A2E52">{sc.get('student_stream_choice','—')}</strong></p>
     </div>
